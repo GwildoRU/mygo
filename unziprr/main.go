@@ -21,7 +21,7 @@ func main() {
 	filename := os.Args[1]
 
 	if err := unpackZip(filename); err != nil {
-		log.Fatal(fmt.Errorf("unpackZip (%s) \n=> %v", filename, err), "\n",strings.Repeat("-",50),"\n")
+		log.Fatal(fmt.Errorf("unpackZip (%s) \n=> %v", filename, err), "\n", strings.Repeat("-", 50), "\n")
 	}
 }
 
