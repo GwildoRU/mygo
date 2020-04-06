@@ -3,5 +3,4 @@
 !.gitignore
 !*.go
 !*.cmd
-src/*
 pkg/*
