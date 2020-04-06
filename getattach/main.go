@@ -119,7 +119,7 @@ func main() {
 
 func getFileName(s string) string {
 	s2 := "=?koi8-r?B?"
-	if strings.Index(s, s2) == 0 {
+	if strings.HasPrefix(s, s2) {
 		s = s[len(s2) : len(s)-2]
 		data, err := base64.StdEncoding.DecodeString(s)
 		if err != nil {
