@@ -19,14 +19,12 @@ func main() {
 	log.SetOutput(fh)
 
 	filename := os.Args[1]
-
 	if err := unpackZip(filename); err != nil {
 		log.Fatal(fmt.Errorf("unpackZip (%s) \n=> %v", filename, err), "\n", strings.Repeat("-", 50), "\n")
 	}
 }
 
 func unpackZip(filename string) error {
-
 	fmt.Println(filename)
 	reader, err := zip.OpenReader(filename)
 	if err != nil {
@@ -46,7 +44,6 @@ func unpackZip(filename string) error {
 				return fmt.Errorf("unpackZippedFile (pdf|xml) \n=> %v", err)
 			}
 		}
-
 	}
 	return nil
 }
@@ -62,8 +59,8 @@ func unpackZippedFile(filename string, zipFile *zip.File) error {
 		return err
 	}
 	defer reader.Close()
-	if _, err = io.Copy(writer, reader); err != nil {
+	if _, err = io.Copy(writer, reader); err != nil { //nolint:wsl
 		return err
 	}
-	return nil
+	return nil //nolint:wsl
 }

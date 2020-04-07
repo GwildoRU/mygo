@@ -13,7 +13,7 @@ func main() {
 	headers := flag.Bool("h", false, "display headers")
 	flag.Parse()
 	path := flag.Arg(0)
-	if path == "" {
+	if path == "" { //nolint:wsl
 		flag.PrintDefaults()
 		os.Exit(1)
 	}

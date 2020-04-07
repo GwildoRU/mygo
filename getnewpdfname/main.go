@@ -35,5 +35,6 @@ func replaceInvalidChars(s string) string {
 	s = re.ReplaceAllString(s, "_")
 	s = strings.ReplaceAll(s, "__", "_")
 	s = strings.Join(strings.Fields(s), " ")
+
 	return s
 }
