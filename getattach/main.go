@@ -44,7 +44,7 @@ func main() {
 	log.Println("Connected")
 
 	// Don't forget to logout
-	defer c.Logout()
+	defer c.Logout() //nolint
 
 	// Login
 	if err := c.Login(YA_USER, YA_PASSWORD); err != nil {
@@ -125,7 +125,7 @@ func getFileName(s string) string {
 		if err != nil {
 			return s
 		}
-		data, err = charmap.ANY_to_UTF8(data, "KOI8-R")
+		data, _ = charmap.ANY_to_UTF8(data, "KOI8-R")
 		return fmt.Sprintf("%s", data)
 	}
 	return s

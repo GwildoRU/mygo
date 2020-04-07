@@ -28,7 +28,6 @@ func main() {
 func unpackZip(filename string) error {
 
 	fmt.Println(filename)
-
 	reader, err := zip.OpenReader(filename)
 	if err != nil {
 		return err
