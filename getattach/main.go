@@ -28,7 +28,7 @@ func main() {
 		YAPASSWORD = "Qpwo1029"
 	)
 
-	inboxes := []Inbox{}
+	var inboxes []Inbox
 
 	file, err := os.Open("inbox.json")
 	if err != nil {
@@ -49,7 +49,6 @@ func main() {
 		inboxes = append(inboxes, m)
 	}
 
-
 	log.Println("Connecting to server...")
 
 	// Connect to server
@@ -60,7 +59,7 @@ func main() {
 	log.Println("Connected")
 
 	// Don't forget to logout
-	defer c.Logout()
+	defer c.Logout() //nolint:errcheck
 
 	// Login
 	if err := c.Login(YAUSER, YAPASSWORD); err != nil {
@@ -118,7 +117,7 @@ func parseInboxItem(c *client.Client, inboxitem Inbox) {
 
 						if params["name"] != "" {
 							fn := getFileName(params["name"])
-							if strings.ToLower(path.Ext(fn)) == strings.ToLower(inboxitem.Attachsuffix) {
+							if strings.EqualFold(path.Ext(fn), inboxitem.Attachsuffix) {
 								log.Println("attach: ", fn)
 
 								c, err := ioutil.ReadAll(p.Body)
@@ -139,8 +138,9 @@ func parseInboxItem(c *client.Client, inboxitem Inbox) {
 			panic(err)
 		}
 	}
-
 }
+
+
 
 func getUniqFileName(oldName string) (newName string) {
 	newName = oldName
@@ -171,4 +171,3 @@ func getFileName(s string) string {
 	}
 	return s
 }
-

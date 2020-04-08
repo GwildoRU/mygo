@@ -12,5 +12,4 @@ func main() {
 	for scanner.Scan() {
 		fmt.Println(">>>", scanner.Text())
 	}
-
 }
