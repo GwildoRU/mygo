@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"github.com/aglyzov/charmap"
 	"github.com/emersion/go-imap"
@@ -11,54 +12,79 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 )
 
+type Inbox struct {
+	Inboxname, Attachsuffix, Outfolder string
+}
+
 func main() {
 	const (
-		YA_HOST     = "imap.yandex.ru:993"
-		YA_USER     = "reestr@kapremont68.ru"
-		YA_PASSWORD = "Qpwo1029"
+		YAHOST     = "imap.yandex.ru:993"
+		YAUSER     = "reestr@kapremont68.ru"
+		YAPASSWORD = "Qpwo1029"
 	)
 
-	if len(os.Args) < 4 {
-		err := fmt.Errorf("usage: %s inboxname attachsuffix outfolder", filepath.Base(os.Args[0]))
-		fmt.Println(err)
-		os.Exit(1)
+	inboxes := []Inbox{}
+
+	file, err := os.Open("inbox.json")
+	if err != nil {
+		panic(err)
 	}
 
-	inboxname := os.Args[1]
-	attachsuffix := os.Args[2]
-	outfolder := os.Args[3]
+	defer file.Close()
 
-	fmt.Println(inboxname, attachsuffix, outfolder)
+	dec := json.NewDecoder(file)
+
+	for {
+		var m Inbox
+		if err := dec.Decode(&m); err == io.EOF {
+			break
+		} else if err != nil {
+			log.Fatal(err)
+		}
+		inboxes = append(inboxes, m)
+	}
+
 
 	log.Println("Connecting to server...")
 
 	// Connect to server
-	c, err := client.DialTLS(YA_HOST, nil)
+	c, err := client.DialTLS(YAHOST, nil)
 	if err != nil {
 		panic(err)
 	}
 	log.Println("Connected")
 
 	// Don't forget to logout
-	defer c.Logout() //nolint
+	defer c.Logout()
 
 	// Login
-	if err := c.Login(YA_USER, YA_PASSWORD); err != nil {
+	if err := c.Login(YAUSER, YAPASSWORD); err != nil {
 		panic(err)
 	}
 	log.Println("Logged in")
 
-	_, err = c.Select(inboxname, false)
+	for i := range inboxes {
+		parseInboxItem(c, inboxes[i])
+	}
+
+	log.Println("Done!")
+}
+
+func parseInboxItem(c *client.Client, inboxitem Inbox) {
+
+	fmt.Println(inboxitem)
+	_, err := c.Select(inboxitem.Inboxname, false)
 	if err != nil {
 		panic(err)
 	}
-
 	criteria := imap.NewSearchCriteria()
 	criteria.WithoutFlags = []string{imap.SeenFlag}
+	//criteria.WithoutFlags = []string{}
 	ids, err := c.Search(criteria)
 	if err != nil {
 		panic(err)
@@ -92,14 +118,14 @@ func main() {
 
 						if params["name"] != "" {
 							fn := getFileName(params["name"])
-							if strings.HasSuffix(fn, attachsuffix) {
+							if strings.ToLower(path.Ext(fn)) == strings.ToLower(inboxitem.Attachsuffix) {
 								log.Println("attach: ", fn)
 
 								c, err := ioutil.ReadAll(p.Body)
 								if err != nil {
 									panic(err)
 								}
-								if err = ioutil.WriteFile(filepath.Join(outfolder, fn), c, 0777); err != nil {
+								if err = ioutil.WriteFile(getUniqFileName(filepath.Join(inboxitem.Outfolder, fn)), c, 0777); err != nil {
 									panic(err)
 								}
 							}
@@ -114,7 +140,22 @@ func main() {
 		}
 	}
 
-	log.Println("Done!")
+}
+
+func getUniqFileName(oldName string) (newName string) {
+	newName = oldName
+	i := 2
+	for {
+		if _, err := os.Stat(newName); err == nil {
+			ext := path.Ext(oldName)
+			noext := strings.TrimSuffix(oldName, ext)
+			newName = fmt.Sprintf(noext+" (%v)"+ext, i)
+			i++
+		} else {
+			break
+		}
+	}
+	return newName
 }
 
 func getFileName(s string) string {
@@ -130,3 +171,4 @@ func getFileName(s string) string {
 	}
 	return s
 }
+
