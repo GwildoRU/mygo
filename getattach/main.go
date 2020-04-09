@@ -15,6 +15,7 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 type Inbox struct {
@@ -67,16 +68,21 @@ func main() {
 	}
 	log.Println("Logged in")
 
+	start := time.Now()
+
 	for i := range inboxes {
 		parseInboxItem(c, inboxes[i])
 	}
 
-	log.Println("Done!")
+	secs := time.Since(start).Seconds()
+
+	//fmt.Println(secs)
+
+	log.Println("Done!", secs)
 }
 
 func parseInboxItem(c *client.Client, inboxitem Inbox) {
 
-	fmt.Println(inboxitem)
 	_, err := c.Select(inboxitem.Inboxname, false)
 	if err != nil {
 		panic(err)
@@ -118,7 +124,7 @@ func parseInboxItem(c *client.Client, inboxitem Inbox) {
 						if params["name"] != "" {
 							fn := getFileName(params["name"])
 							if strings.EqualFold(path.Ext(fn), inboxitem.Attachsuffix) {
-								log.Println("attach: ", fn)
+								log.Println(inboxitem.Inboxname, "=> attach: ", fn)
 
 								c, err := ioutil.ReadAll(p.Body)
 								if err != nil {
@@ -139,8 +145,6 @@ func parseInboxItem(c *client.Client, inboxitem Inbox) {
 		}
 	}
 }
-
-
 
 func getUniqFileName(oldName string) (newName string) {
 	newName = oldName

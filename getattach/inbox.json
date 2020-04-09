@@ -1,10 +1,10 @@
 {
-	"inboxname": 	"Почта|Уварово",    
-	"attachsuffix": ".dbf", 
+	"inboxname": 	"Почта|Уварово",
+	"attachsuffix": ".dbf",
 	"outfolder": 	"DBF"
 }
 {
-	"inboxname": 	"Почта|Мордовский", 
-	"attachsuffix": ".xls", 
+	"inboxname": 	"Почта|Мордовский",
+	"attachsuffix": ".xls",
 	"outfolder": 	"XLS"
 }
