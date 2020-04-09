@@ -29,6 +29,10 @@ func main() {
 		YAPASSWORD = "Qpwo1029"
 	)
 
+	start := time.Now()
+
+	fmt.Printf("--------------------- %s -------------------\n", start)
+
 	var inboxes []Inbox
 
 	file, err := os.Open("inbox.json")
@@ -50,14 +54,14 @@ func main() {
 		inboxes = append(inboxes, m)
 	}
 
-	log.Println("Connecting to server...")
+	fmt.Println("Connecting to server...")
 
 	// Connect to server
 	c, err := client.DialTLS(YAHOST, nil)
 	if err != nil {
 		panic(err)
 	}
-	log.Println("Connected")
+	fmt.Println("Connected")
 
 	// Don't forget to logout
 	defer c.Logout() //nolint:errcheck
@@ -66,9 +70,7 @@ func main() {
 	if err := c.Login(YAUSER, YAPASSWORD); err != nil {
 		panic(err)
 	}
-	log.Println("Logged in")
-
-	start := time.Now()
+	fmt.Println("Logged in")
 
 	for i := range inboxes {
 		parseInboxItem(c, inboxes[i])
@@ -76,7 +78,7 @@ func main() {
 
 	secs := time.Since(start).Seconds()
 
-	log.Println("Done!", secs)
+	fmt.Println("Done!", secs)
 }
 
 func parseInboxItem(c *client.Client, inboxitem Inbox) {
@@ -92,7 +94,7 @@ func parseInboxItem(c *client.Client, inboxitem Inbox) {
 	if err != nil {
 		panic(err)
 	}
-	log.Println("Unseen messages IDs found:", ids)
+	fmt.Println(inboxitem.Inboxname, "=> Unseen messages IDs:", ids)
 
 	if len(ids) > 0 {
 		seqset := new(imap.SeqSet)
@@ -122,7 +124,7 @@ func parseInboxItem(c *client.Client, inboxitem Inbox) {
 						if params["name"] != "" {
 							fn := getFileName(params["name"])
 							if strings.EqualFold(path.Ext(fn), inboxitem.Attachsuffix) {
-								log.Println(inboxitem.Inboxname, "=> attach: ", fn)
+								fmt.Println(inboxitem.Inboxname, "=> attach: ", fn)
 
 								c, err := ioutil.ReadAll(p.Body)
 								if err != nil {
