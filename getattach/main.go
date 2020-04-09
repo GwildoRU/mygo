@@ -76,8 +76,6 @@ func main() {
 
 	secs := time.Since(start).Seconds()
 
-	//fmt.Println(secs)
-
 	log.Println("Done!", secs)
 }
 
