@@ -3,34 +3,48 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
+	"io/ioutil"
 	"log"
-	"os"
 )
 
 func main() {
 	type Inbox struct {
-		Inboxname, Attachsuffix, Outfolder string
+		Inboxname    string `json:"inboxname"`
+		Attachsuffix string `json:"attachsuffix"`
+		Outfolder    string `json:"outfolder"`
 	}
-	file, err := os.Open("inbox.json")
+
+	inboxes2 := []Inbox{
+		{
+			Inboxname:    "Почта|Уварово",
+			Attachsuffix: ".dbf",
+			Outfolder:    "DBF",
+		},
+		{
+			Inboxname:    "Почта|Мордовский",
+			Attachsuffix: ".xls",
+			Outfolder:    "XLS",
+		},
+	}
+
+	b, err := json.Marshal(inboxes2)
 	if err != nil {
-		panic(err)
+		fmt.Println("error:", err)
 	}
 
-	defer file.Close()
+	err = ioutil.WriteFile("inbox2.json", b, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	dec := json.NewDecoder(file)
+	jsonBlob, err := ioutil.ReadFile("inbox.json")
 
-	inboxes := []Inbox{}
+	var inboxes []Inbox
 
-	for {
-		var m Inbox
-		if err := dec.Decode(&m); err == io.EOF {
-			break
-		} else if err != nil {
-			log.Fatal(err)
-		}
-		inboxes = append(inboxes, m)
+	err = json.Unmarshal(jsonBlob, &inboxes)
+	if err != nil {
+		fmt.Println("error:", err)
 	}
 	fmt.Println(inboxes)
+
 }

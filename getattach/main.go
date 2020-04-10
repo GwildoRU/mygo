@@ -10,7 +10,6 @@ import (
 	"github.com/emersion/go-message"
 	"io"
 	"io/ioutil"
-	"log"
 	"os"
 	"path"
 	"path/filepath"
@@ -19,7 +18,9 @@ import (
 )
 
 type Inbox struct {
-	Inboxname, Attachsuffix, Outfolder string
+	Inboxname    string `json:"inboxname"`
+	Attachsuffix string `json:"attachsuffix"`
+	Outfolder    string `json:"outfolder"`
 }
 
 func main() {
@@ -35,23 +36,11 @@ func main() {
 
 	var inboxes []Inbox
 
-	file, err := os.Open("inbox.json")
+	jsonBlob, err := ioutil.ReadFile("inbox.json")
+
+	err = json.Unmarshal(jsonBlob, &inboxes)
 	if err != nil {
 		panic(err)
-	}
-
-	defer file.Close()
-
-	dec := json.NewDecoder(file)
-
-	for {
-		var m Inbox
-		if err := dec.Decode(&m); err == io.EOF {
-			break
-		} else if err != nil {
-			log.Fatal(err)
-		}
-		inboxes = append(inboxes, m)
 	}
 
 	fmt.Println("Connecting to server...")

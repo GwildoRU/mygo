@@ -1,10 +1,27 @@
-{
-	"inboxname": 	"Почта|Уварово",    
-	"attachsuffix": ".dbf", 
-	"outfolder": 	"DBF"
-}
-{
-	"inboxname": 	"Почта|Мордовский", 
-	"attachsuffix": ".xls", 
-	"outfolder": 	"XLS"
-}
+[
+	{
+		"inboxname": "Почта",
+		"attachsuffix": ".dbf",
+		"outfolder": "d:\\!LOAD\\INBOX\\POST"
+	},
+	{
+		"inboxname": "ERZ",
+		"attachsuffix": ".tsv",
+		"outfolder": "d:\\!LOAD\\INBOX\\ERZ"
+	},
+	{
+		"inboxname": "OnlinePayments",
+		"attachsuffix": ".dbf",
+		"outfolder": "d:\\!LOAD\\INBOX\\ONLINE"
+	},
+	{
+		"inboxname": "RSHB",
+		"attachsuffix": ".dbf",
+		"outfolder": "d:\\!LOAD\\INBOX\\RSHB"
+	},
+	{
+		"inboxname": "ТКПБ",
+		"attachsuffix": ".dbf",
+		"outfolder": "d:\\!LOAD\\INBOX\\TKPB"
+	}
+]
