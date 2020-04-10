@@ -10,6 +10,7 @@ import (
 	"github.com/emersion/go-message"
 	"io"
 	"io/ioutil"
+	"log"
 	"os"
 	"path"
 	"path/filepath"
@@ -30,6 +31,8 @@ func main() {
 		YAPASSWORD = "Qpwo1029"
 	)
 
+	log.SetOutput(os.Stdout)
+
 	start := time.Now()
 
 	fmt.Printf("--------------------- %s -------------------\n", start)
@@ -40,7 +43,7 @@ func main() {
 
 	err = json.Unmarshal(jsonBlob, &inboxes)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	fmt.Println("Connecting to server...")
@@ -48,7 +51,7 @@ func main() {
 	// Connect to server
 	c, err := client.DialTLS(YAHOST, nil)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	fmt.Println("Connected")
 
@@ -57,7 +60,7 @@ func main() {
 
 	// Login
 	if err := c.Login(YAUSER, YAPASSWORD); err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	fmt.Println("Logged in")
 
@@ -74,14 +77,14 @@ func parseInboxItem(c *client.Client, inboxitem Inbox) {
 
 	_, err := c.Select(inboxitem.Inboxname, false)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	criteria := imap.NewSearchCriteria()
 	criteria.WithoutFlags = []string{imap.SeenFlag}
 	//criteria.WithoutFlags = []string{}
 	ids, err := c.Search(criteria)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	fmt.Println(inboxitem.Inboxname, "=> Unseen messages IDs:", ids)
 
@@ -99,7 +102,7 @@ func parseInboxItem(c *client.Client, inboxitem Inbox) {
 			for _, r := range msg.Body {
 				entity, err := message.Read(r)
 				if err != nil {
-					panic(err)
+					log.Fatal(err)
 				}
 
 				if mr := entity.MultipartReader(); mr != nil {
@@ -117,10 +120,10 @@ func parseInboxItem(c *client.Client, inboxitem Inbox) {
 
 								c, err := ioutil.ReadAll(p.Body)
 								if err != nil {
-									panic(err)
+									log.Fatal(err)
 								}
 								if err = ioutil.WriteFile(getUniqFileName(filepath.Join(inboxitem.Outfolder, fn)), c, 0777); err != nil {
-									panic(err)
+									log.Fatal(err)
 								}
 							}
 						}
@@ -130,7 +133,7 @@ func parseInboxItem(c *client.Client, inboxitem Inbox) {
 		}
 
 		if err := <-done; err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 	}
 }

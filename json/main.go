@@ -43,7 +43,7 @@ func main() {
 
 	err = json.Unmarshal(jsonBlob, &inboxes)
 	if err != nil {
-		fmt.Println("error:", err)
+		log.Fatal(err)
 	}
 	fmt.Println(inboxes)
 
