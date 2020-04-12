@@ -25,6 +25,8 @@ type Inbox struct {
 }
 
 func main() {
+	start := time.Now()
+
 	const (
 		YAHOST     = "imap.yandex.ru:993"
 		YAUSER     = "reestr@kapremont68.ru"
@@ -32,8 +34,6 @@ func main() {
 	)
 
 	log.SetOutput(os.Stdout)
-
-	start := time.Now()
 
 	fmt.Printf("--------------------- %s -------------------\n", start)
 
