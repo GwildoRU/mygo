@@ -18,7 +18,7 @@ func main() {
 		log.Panic(err)
 	}
 
-	bot.Debug = true
+	//bot.Debug = true
 
 	log.Printf("Authorized on account %s", bot.Self.UserName)
 
@@ -34,7 +34,7 @@ func main() {
 
 		//log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
-		log.Println(update.Message)
+		//log.Println(update.Message)
 
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text+" => qqqqqqqqqqqq")
 		//msg.ReplyToMessageID = update.Message.MessageID
