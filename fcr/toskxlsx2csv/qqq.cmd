@@ -1,0 +1,1 @@
+toskxlsx2csv.exe tosk.xlsx > qqq.csv
