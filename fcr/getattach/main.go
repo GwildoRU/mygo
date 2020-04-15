@@ -115,6 +115,7 @@ func parseInboxItem(c *client.Client, inboxitem Inbox) {
 
 						if params["name"] != "" {
 							fn := getFileName(params["name"])
+							//log.Println(fn)
 							if strings.EqualFold(path.Ext(fn), inboxitem.Attachsuffix) {
 								fmt.Println(inboxitem.Inboxname, "=> attach: ", fn)
 
@@ -155,15 +156,21 @@ func getUniqFileName(oldName string) (newName string) {
 }
 
 func getFileName(s string) string {
+	//log.Println(s)
 	s2 := "=?koi8-r?B?"
+	s3 := "=?="
 	if strings.HasPrefix(s, s2) {
-		s = s[len(s2) : len(s)-2]
-		data, err := base64.StdEncoding.DecodeString(s)
-		if err != nil {
-			return s
+		s = strings.ReplaceAll(s, s2, "\n")
+		s = strings.ReplaceAll(s, s3, "\n")
+		ss := strings.Split(s, "\n")
+
+		for n, s := range ss {
+			data, _ := base64.StdEncoding.DecodeString(s+"=")
+			data, _ = charmap.ANY_to_UTF8(data, "KOI8-R")
+			ss[n] = string(data)
 		}
-		data, _ = charmap.ANY_to_UTF8(data, "KOI8-R")
-		return fmt.Sprintf("%s", data)
+		//return fmt.Sprintf("%s", data)
+		return strings.Join(ss,"")
 	}
 	return s
 }

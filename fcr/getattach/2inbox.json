@@ -2,31 +2,26 @@
 	{
 		"inboxname": "Почта",
 		"attachsuffix": ".dbf",
-		"outfolder": ".\\POST"
+		"outfolder": "d:\\!LOAD\\INBOX\\POST"
 	},
 	{
 		"inboxname": "ERZ",
 		"attachsuffix": ".tsv",
-		"outfolder": ".\\ERZ"
+		"outfolder": "d:\\!LOAD\\INBOX\\ERZ"
 	},
 	{
 		"inboxname": "OnlinePayments",
 		"attachsuffix": ".dbf",
-		"outfolder": ".\\ONLINE"
+		"outfolder": "d:\\!LOAD\\INBOX\\ONLINE"
 	},
 	{
 		"inboxname": "RSHB",
 		"attachsuffix": ".dbf",
-		"outfolder": ".\\RSHB"
-	},
-	{
-		"inboxname": "ТОСК",
-		"attachsuffix": ".xlsx",
-		"outfolder": ".\\TOSK"
+		"outfolder": "d:\\!LOAD\\INBOX\\RSHB"
 	},
 	{
 		"inboxname": "ТКПБ",
 		"attachsuffix": ".dbf",
-		"outfolder": ".\\TKPB"
+		"outfolder": "d:\\!LOAD\\INBOX\\TKPB"
 	}
 ]
