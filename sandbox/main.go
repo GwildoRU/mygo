@@ -1,38 +1,22 @@
 package main
 
 import (
-	"encoding/base64"
 	"fmt"
-	"strings"
+	os "os"
 )
 
 func main() {
-	s := "=?koi8-r?B?7yDQz9PU1dDMxc7JySDExc7F1s7ZyCDT0sXE09TXICjExdTBzNjO2Q==?= =?koi8-r?B?yikueGxzeA==?="
-	s2 := "=?koi8-r?B?"
-	s3 := "=?="
+	myfunc()
+}
 
-	fmt.Println(s)
-	s = strings.ReplaceAll(s, s2, "\n")
-	s = strings.ReplaceAll(s, s3, "\n")
-	fmt.Println(s)
-	ss := strings.Split(s, "\n")
-	fmt.Println(ss)
-
-	s4 := ""
-
-	for n, s := range ss {
-		fmt.Println(n)
-		fmt.Println(s)
-
-
-
-		data, _ := base64.StdEncoding.DecodeString(s+"=")
-		ss[n] = string(data)
-		//fmt.Println(data)
-		fmt.Println(string(data))
-		s4 += string(data)
-	}
-	fmt.Println(strings.ReplaceAll(strings.Join(ss,""),"\n",""))
-	//fmt.Println("==>",strings.Join(ss,""))
-
+func myfunc() {
+	fn1 := "q1.txt"
+	fn2 := "q2.txt"
+	f, _ := os.Create(fn1)
+	defer func() {
+		os.Rename(fn1, fn2)
+	}()
+	defer f.Close()
+	fmt.Fprint(f, "1111111\n", "2222222\n", "333\n")
+	fn2 = "q3.txt"
 }
