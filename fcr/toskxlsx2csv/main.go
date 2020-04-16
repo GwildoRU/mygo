@@ -30,7 +30,10 @@ func main() {
 
 		if nfn == "" {
 			nfn = row[1][6:] + row[1][3:5] + filepath.Ext(fn)
-			csvw, _ = os.Create(filepath.Join(dir, strings.ReplaceAll(nfn, filepath.Ext(nfn), ".csv")))
+			csvw, err = os.Create(filepath.Join(dir, strings.ReplaceAll(nfn, filepath.Ext(nfn), ".csv")))
+			if err != nil {
+				log.Fatal(err)
+			}
 			defer csvw.Close()
 		}
 
