@@ -6,10 +6,12 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func main() {
-	fn := filepath.Base(os.Args[1])
+	//fn := filepath.Base(os.Args[1])
+	dir, fn := filepath.Split(os.Args[1])
 	xl, err := xlsx.Open(fn)
 	if err != nil {
 		log.Fatal(err)
@@ -19,25 +21,37 @@ func main() {
 
 	sheet := xl.Sheet(0)
 
+	nfn := ""
+	var csvw *os.File
 	_, totalRows := sheet.Dimension()
+
 	for rIdx := 6; rIdx < totalRows-1; rIdx++ {
 		row := sheet.Row(rIdx).Values()
 
-		fmt.Print(row[1], "\t")                           //DATA_PL
-		fmt.Print(row[1], "\t")                           //DATA_PL
-		fmt.Print(row[10], "\t")                          //SUMM_PL
-		fmt.Print(row[11], "\t")                          //PENALTY
-		fmt.Print(row[2], "\t")                           //LS
-		fmt.Print(row[1][3:5], row[1][8:], "\t")          //PERIOD
-		fmt.Print("03", "\t")                             //COD_RKC
-		fmt.Print(row[8], "-", row[0], "\t")              //PD_NUM
-		fmt.Print("-", "\t")                              //INN
-		fmt.Print("-", "\t")                              //KPP
-		fmt.Print(row[3], " ", row[4], "\t")              //PLAT
-		fmt.Print(row[7], " ", row[8], " ", row[9], "\t") //PRIM
-		fmt.Print(fn, "\t") //filename
+		if nfn == "" {
+			nfn = row[1][6:] + row[1][3:5] + filepath.Ext(fn)
+			csvw, _ = os.Create(filepath.Join(dir, strings.ReplaceAll(nfn, filepath.Ext(nfn), ".csv")))
+			defer csvw.Close()
+		}
 
-		fmt.Println()
+		fmt.Fprint(csvw)
+		fmt.Fprint(csvw, row[1], "\t")                           //DATA_PL
+		fmt.Fprint(csvw, row[10], "\t")                          //SUMM_PL
+		fmt.Fprint(csvw, row[11], "\t")                          //PENALTY
+		fmt.Fprint(csvw, row[2], "\t")                           //LS
+		fmt.Fprint(csvw, row[1][3:5], row[1][8:], "\t")          //PERIOD
+		fmt.Fprint(csvw, "03", "\t")                             //COD_RKC
+		fmt.Fprint(csvw, row[8], "-", row[0], "\t")              //PD_NUM
+		fmt.Fprint(csvw, "-", "\t")                              //INN
+		fmt.Fprint(csvw, "-", "\t")                              //KPP
+		fmt.Fprint(csvw, row[3], " ", row[4], "\t")              //PLAT
+		fmt.Fprint(csvw, row[7], " ", row[8], " ", row[9], "\t") //PRIM
+		fmt.Fprint(csvw, nfn, "\t\n")                               //filename
+	}
+
+	xl.Close()
+	if err := os.Rename(filepath.Join(dir, fn), filepath.Join(dir, nfn)); err != nil {
+		log.Fatal(err)
 	}
 
 }
