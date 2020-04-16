@@ -1,22 +1,34 @@
 package main
 
 import (
+	"bytes"
+	"debug/macho"
 	"fmt"
-	os "os"
+	"log"
+	"os"
 )
 
 func main() {
-	myfunc()
-}
 
-func myfunc() {
-	fn1 := "q1.txt"
-	fn2 := "q2.txt"
-	f, _ := os.Create(fn1)
-	defer func() {
-		os.Rename(fn1, fn2)
-	}()
-	defer f.Close()
-	fmt.Fprint(f, "1111111\n", "2222222\n", "333\n")
-	fn2 = "q3.txt"
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println()
+	var b bytes.Buffer // A Buffer needs no initialization.
+	fmt.Println(b)
+	b.Write([]byte("Hello "))
+	fmt.Println(b)
+	fmt.Fprintf(&b, "world!")
+	fmt.Println(b)
+	b.WriteTo(os.Stdout)
+	ss := "hjkkk"
+	if err != nil {
+		macho.FlagHasTLVDescriptors
+	}
+	for i, i2 := range collection {
+
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
 }
