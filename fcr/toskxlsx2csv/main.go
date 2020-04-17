@@ -52,6 +52,6 @@ func main() {
 		fmt.Fprint(csvw, "-", "\t")                              //KPP
 		fmt.Fprint(csvw, row[3], " ", row[4], "\t")              //PLAT
 		fmt.Fprint(csvw, row[7], " ", row[8], " ", row[9], "\t") //PRIM
-		fmt.Fprint(csvw, nfn, "\t\n")                            //filename
+		fmt.Fprint(csvw, nfn, "\r\n")                            //filename
 	}
 }
