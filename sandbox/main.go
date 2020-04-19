@@ -2,12 +2,18 @@ package main
 
 import (
 	"fmt"
-	"runtime"
+	"unicode/utf8"
 )
 
 func main() {
-	//ioutil.ReadDir
-	fmt.Println(runtime.GOMAXPROCS(-1))
-	//fmt.Println("11111111")
-	//log.Println("22222222222")
+	s := "abcйefg"
+	fmt.Println(len(s), utf8.RuneCountInString(s))
+	a := 1
+loop:
+	fmt.Println(a)
+	a++
+	if a < 10 {
+		goto loop
+	}
+
 }
