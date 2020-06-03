@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
 	"strings"
@@ -38,8 +39,13 @@ func main() {
 		//log.Println(update.Message)
 
 		s := update.Message.Text
-		if i := strings.Index(s,"://"); i == 4 || i == 5 {
-			s = s[:strings.Index(s,"?")]
+		if i := strings.Index(s, "://"); i == 4 || i == 5 {
+			s = s[:strings.Index(s, "?")]
+		}
+
+
+		if s == update.Message.Text {
+			s = fmt.Sprintf("%q", s)
 		}
 
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, s)

@@ -39,7 +39,7 @@ func unpackZip(filename string) error {
 			if err = unpackZip("TMP\\" + zipFile.Name); err != nil {
 				return fmt.Errorf("unpackZip (%s) \n=> %v", zipFile.Name, err)
 			}
-		} else if re := regexp.MustCompile(`^report.*\.(pdf|xml)$`); re.Match([]byte(zipFile.Name)) {
+		} else if re := regexp.MustCompile(`^(report|kp_).*\.(pdf|xml)$`); re.Match([]byte(zipFile.Name)) {
 			if err = unpackZippedFile("OUT\\"+zipFile.Name, zipFile); err != nil {
 				return fmt.Errorf("unpackZippedFile (pdf|xml) \n=> %v", err)
 			}

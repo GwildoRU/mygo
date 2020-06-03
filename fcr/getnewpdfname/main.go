@@ -27,6 +27,9 @@ func main() {
 }
 
 func extractTagValue(s, tag string) string {
+	if strings.Index(s, "<"+tag+">") < 0 {
+		return ""
+	}
 	return s[strings.Index(s, "<"+tag+">")+len(tag)+2 : strings.Index(s, "</"+tag+">")]
 }
 

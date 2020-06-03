@@ -13,19 +13,28 @@ func main() {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT addr, TO_CHAR(HOUSE_ID) FROM mv_houses_adreses where HOUSE_ID = 2361")
+
+	rows, err := db.Query("SELECT addr, HOUSE_ID FROM mv_houses_adreses where HOUSE_ID = 2361")
 	if err != nil {
 		panic(err)
 	}
 	defer rows.Close()
 
+	type R struct {
+		addr    string
+		houseId int
+	}
+
 	for rows.Next() {
-		var s string
-        var d int
-		if err := rows.Scan(&s, &d); err != nil {
+		r := new(R)
+		if err := rows.Scan(&r.addr, &r.houseId); err != nil {
 			panic(err)
 		}
-		fmt.Println(s, d)
+		fmt.Println(*r)
 	}
 
 }
+
+
+
+

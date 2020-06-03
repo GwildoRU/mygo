@@ -5,9 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/aglyzov/charmap"
-	"github.com/emersion/go-imap"
 	"github.com/emersion/go-imap/client"
-	"github.com/emersion/go-message"
 	"io"
 	"io/ioutil"
 	"log"
@@ -139,6 +137,7 @@ func parseInboxItem(c *client.Client, inboxitem Inbox) {
 	}
 }
 
+//getUniqFileName возхвдощшщшшщшзщ
 func getUniqFileName(oldName string) (newName string) {
 	newName = oldName
 	i := 2
