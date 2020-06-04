@@ -1,15 +1,7 @@
 package main
 
-import (
-	"fmt"
-	"time"
-)
+import "log"
 
 func main() {
-
-	//d := time.Now().Day()
-	d := time.Now()
-
-	fmt.Printf("%s", d )
-
+	log.Println("111111111111")
 }
